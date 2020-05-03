@@ -1,0 +1,20 @@
+BASEDIR=$(dirname $0)
+if [ "$1" = "add" ]; then
+    $BASEDIR/out/main $*
+else
+
+    result=$($BASEDIR/out/main $*)
+    ret=$?
+
+    echo "\U1F916 Hey"
+    if [ $ret -eq 0 ]; then
+        echo
+        echo "\U1F3C3 : $result"
+        echo
+        eval $result
+    else
+        echo
+        echo "\U2757 You haven't selected any command"
+        echo
+    fi
+fi
