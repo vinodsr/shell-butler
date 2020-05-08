@@ -1,9 +1,9 @@
 BASEDIR=$(dirname $0)
 if [ "$1" = "add" ]; then
-    $BASEDIR/out/main $*
+    shell-butler $*
 else
 
-    result=$($BASEDIR/out/main $*)
+    result=$(shell-butler $*)
     ret=$?
 
     echo "\U1F916 Hey"

@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "go build  -o out/ ${file}",
+            "command": "go install",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
