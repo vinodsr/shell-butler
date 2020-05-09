@@ -1,0 +1,9 @@
+Package: shell-butler
+Version: 1.0.2
+Section: custom
+Priority: optional
+Architecture: all
+Essential: no
+Installed-Size: 1024
+Maintainer: Vinod S R <contact@vinodsr.com>
+Description: Your butler to run frequent commands in linux

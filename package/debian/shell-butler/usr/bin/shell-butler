@@ -1,0 +1,2 @@
+#Run using the current shell context
+source "/opt/shell-butler/bin/shell-butler-run"
