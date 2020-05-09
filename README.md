@@ -19,6 +19,8 @@ This is simple tool to organize your frequently using shell command.
 
 ## How to install
 
+You can also download deb packages from [releases](https://github.com/vinodsr/shell-butler/releases/)
+
 Build the application using
 
 ```
