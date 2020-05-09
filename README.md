@@ -21,6 +21,24 @@ This is simple tool to organize your frequently using shell command.
 
 You can also download deb packages from [releases](https://github.com/vinodsr/shell-butler/releases/)
 
+```bash
+sudo apt install <shell-butler>.deb
+```
+>
+>
+> **Note** : 
+> 
+> If you want to get the shell features to the command execution then create an alias in your ~/.profile or ~/.bash_profile sourcing the binary
+> 
+> alias sb='source /usr/bin/shellbutler'
+>
+> This is helpful if you are running a command thay involves some shell theme color variable eg : LS_COLORS
+>
+>
+
+
+## How to build
+
 Build the application using
 
 ```
