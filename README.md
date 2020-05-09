@@ -1,6 +1,7 @@
 ![Screenshot from 2020-05-03 13-51-24](https://user-images.githubusercontent.com/462648/80909535-bd37cf80-8d46-11ea-8658-af760b359791.png)
 
 # shell-butler
+![Go](https://github.com/vinodsr/shell-butler/workflows/Go/badge.svg)
 
 This is simple tool to organize your frequently using shell command. 
 
