@@ -1,7 +1,9 @@
 package add
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/gookit/color"
@@ -35,7 +37,9 @@ func Execute() {
 	fmt.Printf("Input the command you need to run for %s ", contextInput)
 	fmt.Println()
 	fmt.Print("> ")
-	fmt.Scan(&commandInput)
+	scanner := bufio.NewScanner(os.Stdin)
+	scanner.Scan()
+	commandInput = scanner.Text()
 
 	fmt.Println()
 	fmt.Println()
