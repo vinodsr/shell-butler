@@ -68,6 +68,14 @@ To add your commands edit the settings.json
 }
 ```
 
+You can also run the add command
+
+```
+run add
+```
+
+Make sure that run is available in the PATH.
+
 ## Tested on
 
 * Ubuntu 20.04 (zsh)
