@@ -46,9 +46,13 @@ func (rt *Runtime) GetContextDS() []string {
 }
 
 // Init initializes
-func (rt *Runtime) Init(configData types.ConfigData, commandMap map[string]string, contextDataSource []string) {
+func (rt *Runtime) Init(configData types.ConfigData) {
 	rt.configData = configData
-	rt.commandMap = commandMap
 	rt.initialized = true
-	rt.contextDataSource = contextDataSource
+	rt.commandMap = make(map[string]string)
+	for _, command := range configData.Commands {
+		// splits := strings.Split(command.Context, ":")
+		rt.contextDataSource = append(rt.contextDataSource, command.Context)
+		rt.commandMap[command.Context] = command.Program
+	}
 }

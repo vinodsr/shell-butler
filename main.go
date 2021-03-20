@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 
 	addcli "github.com/vinodsr/shell-butler/lib/cli/add"
+	"github.com/vinodsr/shell-butler/lib/cli/help"
 	config "github.com/vinodsr/shell-butler/lib/config"
 	runtime "github.com/vinodsr/shell-butler/lib/runtime"
 	types "github.com/vinodsr/shell-butler/lib/types"
@@ -16,9 +17,6 @@ import (
 
 //Main program
 func main() {
-
-	var contextDataSource []string
-	var commandMap = make(map[string]string)
 	var configData types.ConfigData
 
 	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
@@ -47,20 +45,18 @@ func main() {
 	//fmt.Print(commands.Commands[0].Context)
 
 	// initialise the list datasource .
-	for _, command := range configData.Commands {
-		// splits := strings.Split(command.Context, ":")
-		contextDataSource = append(contextDataSource, command.Context)
-		commandMap[command.Context] = command.Program
-	}
 
 	// Initialize the runtime
 	var rt *runtime.Runtime = runtime.GetRunTime()
-	rt.Init(configData, commandMap, contextDataSource)
+	rt.Init(configData)
 
 	if len(os.Args) > 1 {
 		argCommand := os.Args[1]
 		if argCommand == "add" {
 			addcli.Execute()
+			os.Exit(1)
+		} else if argCommand == "help" || argCommand == "--help" {
+			help.Execute()
 			os.Exit(1)
 		}
 

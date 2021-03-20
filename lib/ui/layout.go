@@ -4,10 +4,13 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 
 	ui "github.com/gizak/termui/v3"
+	"github.com/vinodsr/shell-butler/lib/config"
 	runtime "github.com/vinodsr/shell-butler/lib/runtime"
+	lib "github.com/vinodsr/shell-butler/lib/types"
 
 	"github.com/gizak/termui/v3/widgets"
 )
@@ -19,6 +22,7 @@ func Render() {
 	rt := runtime.GetRunTime()
 	commandMap := rt.GetCommandMap()
 	contextDataSource := rt.GetContextDS()
+	configData := rt.GetConfig()
 	commandStr := ""
 	var filteredDataSource []string
 	var commandLevel int = 1
@@ -51,7 +55,7 @@ func Render() {
 	debugBox := widgets.NewParagraph()
 	debugBox.Title = "Debug"
 	debugBox.Text = ""
-	debugBox.SetRect(0, 50, 50, 53)
+	debugBox.SetRect(0, termHeight-10, termWidth, termHeight)
 
 	contextListBox := widgets.NewList()
 	filteredDataSource = displayContextatLevel(updateContextList(contextDataSource, ""), commandLevel)
@@ -106,6 +110,42 @@ func Render() {
 
 		case "<Space>":
 			commandStr += " "
+		case "<Delete>":
+			shouldDelete := ConfirmBox("Are you to delete the entry ?", uiEvents)
+			if shouldDelete {
+				if contextListBox.SelectedRow >= 0 && len(filteredDataSource) > 0 {
+					toDeleteContext := append(selectedContext, filteredDataSource[contextListBox.SelectedRow])
+
+					_joinedContext := strings.Join(toDeleteContext, ":")
+					debug("JOined context = "+_joinedContext, debugBox)
+					var newCommandList []lib.Command
+					deleted := false
+					for _, configEntry := range configData.Commands {
+						debug(configEntry.Context, debugBox)
+						if strings.HasPrefix(configEntry.Context, _joinedContext) {
+							debug("Found Context", debugBox)
+							deleted = true
+						} else {
+							newCommandList = append(newCommandList, configEntry)
+						}
+					}
+					debug("Should replace ? "+strconv.FormatBool(deleted), debugBox)
+					if deleted {
+						configData.Commands = newCommandList
+						config.WriteConfig(configData)
+						rt.Init(configData)
+						commandMap = rt.GetCommandMap()
+						contextDataSource = rt.GetContextDS()
+						for _, cc := range contextDataSource {
+							debug(" context = "+cc, debugBox)
+
+						}
+						configData = rt.GetConfig()
+					}
+
+				}
+				break
+			}
 		case "<Enter>":
 			// Now take the context available in the select box
 			if contextListBox.SelectedRow >= 0 && len(filteredDataSource) > 0 {
@@ -146,6 +186,10 @@ func Render() {
 
 		filterText := "(?i)^" + strings.Join(selectedContext, ":") + contextSep + "[^:]*" + commandStr + ".*\\:?"
 		//contextTextBox.Text = filterText
+		for _, cc := range contextDataSource {
+			debug(" context main DS = "+cc, debugBox)
+
+		}
 		filteredDataSource = displayContextatLevel(updateContextList(contextDataSource, filterText), commandLevel)
 		contextListBox.Rows = filteredDataSource
 		if alertText == "" && len(filteredDataSource) == 0 {
@@ -156,11 +200,12 @@ func Render() {
 		}
 		debug(filterText, debugBox)
 
-		displayItems := []ui.Drawable{contextListBox, contextTextBox}
+		displayItems := []ui.Drawable{contextListBox, contextTextBox, debugBox}
 		if alertText != "" {
 			alertBox.Text = alertText
 			displayItems = append(displayItems, alertBox)
 		}
+
 		ui.Render(displayItems...)
 		alertText = ""
 	}
