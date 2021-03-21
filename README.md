@@ -49,7 +49,7 @@ go build -o out/ main.go
 Create a alias to the run script 
 
 ```
-alias j='source <path to package> /run'
+alias j='source <path to package>/alfred'
 ```
 
 
@@ -71,7 +71,7 @@ To add your commands edit the settings.json
 You can also run the add command
 
 ```
-run add
+alfred add
 ```
 
 Make sure that run is available in the PATH.

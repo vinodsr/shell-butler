@@ -1,8 +1,14 @@
 package runtime
 
 import (
+	"encoding/json"
+	"io/ioutil"
+	"log"
+	"os"
+	"path/filepath"
 	"sync"
 
+	"github.com/vinodsr/shell-butler/lib/config"
 	types "github.com/vinodsr/shell-butler/lib/types"
 )
 
@@ -46,9 +52,37 @@ func (rt *Runtime) GetContextDS() []string {
 }
 
 // Init initializes
-func (rt *Runtime) Init(configData types.ConfigData, commandMap map[string]string, contextDataSource []string) {
-	rt.configData = configData
-	rt.commandMap = commandMap
+func (rt *Runtime) Init() {
+
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	dir, _ = os.UserHomeDir()
+	configFile := dir + "/.butler/settings.json"
+	dat, err := ioutil.ReadFile(configFile)
+	if err != nil {
+		initStruct := types.ConfigData{
+			Commands: []types.Command{{
+				Context: "Help",
+				Program: "echo Edit " + configFile + " to add more commands",
+			}},
+		}
+		//fmt.Printf("%+v\n", initStruct)
+		//os.Exit(0)
+		config.WriteConfig(initStruct)
+		rt.configData = initStruct
+	}
+
+	json.Unmarshal([]byte(string(dat)), &rt.configData)
+
 	rt.initialized = true
-	rt.contextDataSource = contextDataSource
+	rt.commandMap = make(map[string]string)
+	rt.contextDataSource = nil
+	for _, command := range rt.configData.Commands {
+		// splits := strings.Split(command.Context, ":")
+		rt.contextDataSource = append(rt.contextDataSource, command.Context)
+		rt.commandMap[command.Context] = command.Program
+	}
 }

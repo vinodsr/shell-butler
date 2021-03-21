@@ -6,6 +6,7 @@ import (
 
 	"github.com/enescakir/emoji"
 	"github.com/gizak/termui/v3/widgets"
+	lib "github.com/vinodsr/shell-butler/lib/types"
 )
 
 func filter(ss []string, test func(string) bool) (ret []string) {
@@ -54,4 +55,8 @@ func formatCommandString(selectedContext []string, commandStr string) string {
 		formattedCommandStr += "[" + s + "] "
 	}
 	return formattedCommandStr + emoji.RightArrow.String() + " " + commandStr
+}
+
+func RemoveIndex(s []lib.Command, index int) []lib.Command {
+	return append(s[:index], s[index+1:]...)
 }
