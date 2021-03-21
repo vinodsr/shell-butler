@@ -57,7 +57,7 @@ func Execute() {
 
 	if commandAccepted {
 		newCommand := types.Command{
-			Context: contextInput,
+			Context: contextInput + ":",
 			Program: commandInput,
 		}
 		configData.Commands = append(configData.Commands, newCommand)

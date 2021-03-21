@@ -1,8 +1,6 @@
 package ui
 
 import (
-	"fmt"
-
 	ui "github.com/gizak/termui/v3"
 	"github.com/gizak/termui/v3/widgets"
 )
@@ -12,11 +10,12 @@ func ConfirmBox(msg string, uiEvents <-chan ui.Event) bool {
 	alertBox := widgets.NewParagraph()
 	alertBox.Title = "Alert"
 	alertBox.Text = msg + " [y/n] "
-	alertBox.SetRect(5, 5, 100-5, 8)
+	termWidth, termHeight := ui.TerminalDimensions()
+	alertBox.SetRect((termWidth/2)-40, (termHeight/2)-2, (termWidth/2)+40, (termHeight/2)+2)
 	alertBox.TextStyle.Fg = ui.ColorRed
 	alertBox.BorderStyle.Fg = ui.ColorRed
 	ret := true
-	fmt.Println(msg)
+	//fmt.Println(msg)
 	ui.Render(alertBox)
 	loop := true
 	for loop {
