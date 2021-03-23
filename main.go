@@ -13,6 +13,7 @@ import (
 func main() {
 	// Initialize the runtime
 	var rt *runtime.Runtime = runtime.GetRunTime()
+
 	rt.Init()
 
 	if len(os.Args) > 1 {

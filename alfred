@@ -4,11 +4,19 @@ BASEDIR=$(dirname $SCRIPT)
 if [ "$1" = "add" ]; then
     ${BASEDIR}/shell-butler $*
 else
-
-    result=$(${BASEDIR}/shell-butler $*)
+   ID=$$
+   # result=$(${BASEDIR}/shell-butler $*)4
+   ${BASEDIR}/shell-butler $*
+   if [ ! -f $ID.command ]; then
+    echo -e "\U1F916 No command to execute !"
+    exit 0
+   fi;
+   result=`cat $ID.command`
+   rm -f $ID.command
+    echo "OUTPUT IS $result"
     ret=$?
 
-    echo -e "\U1F916 Hey"
+    echo -e "\U1F916 Executing command ..."
     if [ $ret -eq 0 ]; then
         echo
         echo -e "\U1F3C3 : $result"

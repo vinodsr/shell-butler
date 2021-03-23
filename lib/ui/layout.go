@@ -89,15 +89,15 @@ func Render() {
 		e := <-uiEvents
 
 		switch e.ID {
-		case "q", "<C-c>", "<Escape>":
+		case "<C-c>", "<Escape>":
 			ui.Close()
 			os.Exit(1)
 			return
-		case "j", "<Down>":
+		case "<Down>":
 			if len(contextListBox.Rows) > 0 {
 				contextListBox.ScrollDown()
 			}
-		case "k", "<Up>":
+		case "<Up>":
 			if len(contextListBox.Rows) > 0 {
 				contextListBox.ScrollUp()
 			}
@@ -121,7 +121,7 @@ func Render() {
 			if len(contextListBox.Rows) > 0 {
 				contextListBox.ScrollTop()
 			}
-		case "G", "<End>":
+		case "<End>":
 			if len(contextListBox.Rows) > 0 {
 				contextListBox.ScrollBottom()
 			}
@@ -176,7 +176,6 @@ func Render() {
 					}
 
 				}
-				break
 			}
 		case "<Enter>":
 			// Now take the context available in the select box
@@ -187,6 +186,10 @@ func Render() {
 				debug("JOined context = "+_joinedContext, debugBox)
 				if rt.GetCommandMap()[_joinedContext] != "" {
 					fmt.Println(rt.GetCommandMap()[_joinedContext])
+					shellId := os.Getppid()
+					f, _ := os.Create(fmt.Sprintf("%d.command", shellId))
+					defer f.Close()
+					f.WriteString(rt.GetCommandMap()[_joinedContext])
 					ui.Clear()
 					ui.Close()
 					os.Exit(0)
